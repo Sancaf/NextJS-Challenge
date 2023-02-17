@@ -105,3 +105,97 @@ a {
     color-scheme: dark;
   }
 }
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('//fonts.googleapis.com/css?family=Playfair+Display')
+    format('truetype');
+}
+
+.products-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1em;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #d5d5d5;
+  color: #3e1f03;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0.7em;
+  padding: 1em;
+  transition: transform 0.1s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.card h2 {
+  font-family: 'Playfair Display', cursive;
+}
+
+.card-header {
+  display: flex;
+  gap: 1.7em;
+  align-items: first baseline;
+}
+
+.full-info-card {
+  margin: 1.7em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.buy-sku-card {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  gap: 1em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.buy-beer-btn {
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.buy-beer-btn:hover {
+  background-color: #d2691e; /* changes the background color when the button is hovered over */
+}
+
+img {
+  margin: 0.7em;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+li {
+  list-style: none;
+}
+
+p,
+h3,
+h4,
+h2 {
+  font-family: 'Playfair Display', regular;
+}
