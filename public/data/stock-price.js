@@ -1,6 +1,6 @@
 export default {
   10167: {
-    stock: 130,
+    stock: 30,
     price: 2865,
   },
   10166: {

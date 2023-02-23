@@ -4,6 +4,7 @@ import Img from 'next/image'
 
 import { Product } from '@/models/product.model'
 import products from '../../public/data/products'
+import { getSkuCodes } from '@/services/getSkuCodes.service'
 
 type SkuData = {
   code: string
@@ -11,15 +12,15 @@ type SkuData = {
   price: string
 }
 
-export function ProductDetailPage({ product }: any) {
+export function ProductDetailPage({ product }: { product: Product }) {
   const [skuData, setSkuData] = useState<SkuData[]>([])
 
   useEffect(() => {
     const fetchStockAndPrice = async () => {
       const results = await Promise.all(
         product.skus.map(async (sku: any) => {
-          const res = await fetch(`/api/stock-price/${sku.code}`)
-          const { stock, price } = await res.json()
+          const response = await getSkuCodes(sku.code)
+          const { stock, price } = await response
           return {
             code: sku.code,
             stock,
@@ -29,9 +30,13 @@ export function ProductDetailPage({ product }: any) {
       )
       setSkuData(results)
     }
-
     fetchStockAndPrice()
-  }, [])
+
+    const workaround = setInterval(() => {
+      fetchStockAndPrice()
+    }, 5000)
+    return () => clearInterval(workaround)
+  }, [product.skus])
 
   return (
     <div style={{ height: '100vh' }}>

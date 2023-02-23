@@ -7,7 +7,9 @@ function Card({ product }: { product: Product }) {
   return (
     <Link
       rel="stylesheet"
-      href={`/${product.id}-${product.brand.replace(/\s+/g, '-')}`}
+      href={{
+        pathname: `/${product.id}-${product.brand.replace(/\s+/g, '-')}`,
+      }}
       key={product.id}
       className="card"
     >
