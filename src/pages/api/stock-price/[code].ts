@@ -1,15 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Product, StockPrice } from '../../../models/stock-price.model'
 
-import products from '../stock-price.js'
+import stockPriceData from '../../../../public/data/stock-price.js'
+import { StockPrice } from '../../../models/stock-price.model'
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Product>
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { code } = req.query
+  const stockPrice = (stockPriceData as StockPrice)[code as any]
 
-  const product = (products as StockPrice)[code as any]
-
-  res.status(200).json(product)
+  if (stockPrice) {
+    const { stock, price } = stockPrice
+    res.status(200).json({ stock, price: (price / 100).toFixed(2) })
+  } else {
+    res.status(404).json({ message: 'Product not found' })
+  }
 }

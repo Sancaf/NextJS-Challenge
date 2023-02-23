@@ -22,11 +22,12 @@ export function ProductDetailPage() {
       const results = await Promise.all(
         product.skus.map(async (sku) => {
           const res = await fetch(`/api/stock-price/${sku.code}`)
+          console.log(res.json())
           const { stock, price } = await res.json()
           return {
             code: sku.code,
             stock,
-            price: (price / 100).toFixed(2),
+            price: price,
           }
         })
       )
