@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+
 import Img from 'next/image'
 
 import { Product } from '@/models/product.model'
+import products from '../../public/data/products'
 
 type SkuData = {
   code: string
@@ -10,19 +11,14 @@ type SkuData = {
   price: string
 }
 
-export function ProductDetailPage() {
-  const router = useRouter()
-
-  const { data } = router.query
-  const product: Product = typeof data === 'string' ? JSON.parse(data) : null
+export function ProductDetailPage({ product }: any) {
   const [skuData, setSkuData] = useState<SkuData[]>([])
 
   useEffect(() => {
     const fetchStockAndPrice = async () => {
       const results = await Promise.all(
-        product.skus.map(async (sku) => {
+        product.skus.map(async (sku: any) => {
           const res = await fetch(`/api/stock-price/${sku.code}`)
-          console.log(res.json())
           const { stock, price } = await res.json()
           return {
             code: sku.code,
@@ -35,9 +31,6 @@ export function ProductDetailPage() {
     }
 
     fetchStockAndPrice()
-
-    const intervalId = setInterval(fetchStockAndPrice, 5000)
-    return () => clearInterval(intervalId)
   }, [])
 
   return (
@@ -65,7 +58,9 @@ export function ProductDetailPage() {
           <h3>Skus:</h3>
           <div style={{ display: 'flex', gap: '1em' }}>
             {skuData.map((sku) => {
-              const matchingSku = product.skus.find((s) => s.code === sku.code)
+              const matchingSku = product.skus.find(
+                (s: any) => s.code === sku.code
+              )
               return (
                 <div key={sku.code} className="buy-sku-card">
                   <h4>{matchingSku?.name}:</h4>
@@ -85,3 +80,18 @@ export function ProductDetailPage() {
 }
 
 export default ProductDetailPage
+
+export async function getStaticPaths() {
+  const paths = products.map((product) => ({
+    params: { id: `${product.id}-${product.brand.replace(/\s+/g, '-')}` },
+  }))
+
+  return { paths, fallback: true }
+}
+
+export async function getStaticProps({ params }: any) {
+  const productId = params.id.split('-')[0]
+  const product = products.find((product) => product.id === parseInt(productId))
+
+  return { props: { product }, revalidate: 5 }
+}
